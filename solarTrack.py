@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 """
 @author: sourkey
+
+Based on calculations used by NOAA and from Astronomical Algorithms by Jean Meeus
 """
 import math
 import datetime
@@ -72,10 +74,7 @@ class Sun:
         self.SolZen = (math.acos(math.sin(self.k * self.latitude) * math.sin(self.k * self.SunDec)\
                 + math.cos(self.k * self.latitude) * math.cos(self.k * self.SunDec) * math.cos(self.k * self.HourAng))) / self.k
         #solar elevation
-        self.SolEle = 90.0000 - self.SolZen                                                     
-
-        #pass corrected solar elevation to global variable trackEle
-        self.sunEle = self.SolEle                                                    
+        self.SolEle = 90.0000 - self.SolZen                                                                                                      
 
         #solar azimuth calculation
         if self.HourAng > 0:                                                         
@@ -85,12 +84,5 @@ class Sun:
            self.SolAzi = math.fmod(540.0000 - (math.acos((math.sin(self.k * self.latitude) * math.cos(self.k * self.SolZen)\
                 - math.sin(self.k * self.SunDec)) / (math.cos(self.k * self.latitude) * math.sin(self.k * self.SolZen)))) / self.k,360.0000)
         
-        #solar azimuth
-        self.sunAzi = self.SolAzi    
-        
         print('Sol Elevation:', self.SolEle)
         print('Sol Azimuth:', self.SolAzi)
-        
-        
-sun1 = Sun()
-sun1.calcSun(year=2019, day=14, month=6, hour=14, minute=45)
