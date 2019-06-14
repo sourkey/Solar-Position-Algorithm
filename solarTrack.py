@@ -14,7 +14,7 @@ class Sun:
     def __init__(self):
         self.solPos = []
 
-    def calcSun(self, year=2019, month=2, day=2, hour=14, minute=0, second=0, lat=0, long=0, interval=60):
+    def calcSun(self, year=2019, month=2, day=2, hour=14, minute=0, second=0, lat=0, long=0):
         self.time = int(time.mktime(datetime.datetime(year, month, day, hour, minute, second).timetuple()))
         self.latitude = lat
         self.longitude = long
