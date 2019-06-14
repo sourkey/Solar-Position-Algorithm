@@ -1,4 +1,4 @@
-# Solar Position Alrorithm
+# Solar Position Algorithm
 
 Calculate the solar position (azimuth and elevation) for any day and time (tested only after 00:00 on January 1, 1970).
 
