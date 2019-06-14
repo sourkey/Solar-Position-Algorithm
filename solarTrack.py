@@ -4,15 +4,21 @@
 @author: sourkey
 """
 import math
+import datetime
+import time
 
 class Sun:
     
-    def __init__(self, time=0, lat=0, long=0):
-        self.time = time
+    def __init__(self):
+        self.solPos = []
+
+    def calcSun(self, year=2019, month=2, day=2, hour=14, minute=0, second=0, lat=0, long=0, interval=60):
+        self.time = int(time.mktime(datetime.datetime(year, month, day, hour, minute, second).timetuple()))
         self.latitude = lat
         self.longitude = long
-
-    def calcSun(self, interval=60):
+        self.hour = hour
+        self.minute = minute
+        self.second = second
         
         #Julian Century
         self.T = ((((self.time / 86400) + 2444239.5) - 2451545) / 36525)
@@ -44,7 +50,7 @@ class Sun:
         self.SunRtA = (math.atan2(math.cos(self.k * self.SunAppLong),\
                 math.cos(self.k * self.ObliqC) * math.sin(self.k * self.SunAppLong))) / self.k   
         #Sun declination
-        self.SunDec = (math.asin(math.sin(self.k * self.ObliqC) * self.sin(self.k * self.SunAppLong))) / self.k
+        self.SunDec = (math.asin(math.sin(self.k * self.ObliqC) * math.sin(self.k * self.SunAppLong))) / self.k
         #var y
         self.VarY = math.tan(self.k * (self.ObliqC / 2.0000)) * math.tan(self.k * (self.ObliqC / 2.0000))
         #eq of time            
@@ -52,13 +58,15 @@ class Sun:
                 * math.sin(self.k * self.M) + 4.0000 * self.eeo * self.VarY * math.sin(self.k * self.M)\
                 * math.cos(2.0000 * self.k * self.Lo) - 0.5000 * self.VarY * self.VarY \
                 * math.sin(4.0000 * self.k * self.Lo) - 1.2500 * self.eeo**2 * math.sin(2.0000 * self.k * self.M)) / self.k
-        self.TrueSolT = math.fmod((RTC.tm_hour + RTC.tm_min/60.0000 + RTC.tm_sec/3600.0000)/24.0000*1440.0000+EqTime+4.0000*coordinates.lon,1440.0000); 	#true solar time (min)
+        #true solar time (min)
+        self.TrueSolT = math.fmod((self.hour + self.minute / 60.0000 + self.second / 3600.0000) / 24.0000 * 1440.0000\
+                + self.EqTime + 4.0000 * self.longitude,1440.0000) 	
         
         #Hour angle calculation
         if self.TrueSolT / 4.0000 < 0.0000:                                             
-            self.g = self.TrueSolT / 4.0000 + 180.0000
+            self.HourAng = self.TrueSolT / 4.0000 + 180.0000
         else:
-            self.g = self.TrueSolT / 4.0000 - 180.0000
+            self.HourAng = self.TrueSolT / 4.0000 - 180.0000
 
         #Solar zenith
         self.SolZen = (math.acos(math.sin(self.k * self.latitude) * math.sin(self.k * self.SunDec)\
@@ -79,3 +87,10 @@ class Sun:
         
         #solar azimuth
         self.sunAzi = self.SolAzi    
+        
+        print('Sol Elevation:', self.SolEle)
+        print('Sol Azimuth:', self.SolAzi)
+        
+        
+sun1 = Sun()
+sun1.calcSun(year=2019, day=14, month=6, hour=14, minute=45)
